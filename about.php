@@ -1,5 +1,6 @@
 <?php 
 $about = true;
+$enabled_page = true;
 include 'header.php';
 ?>
 <!-- content start -->

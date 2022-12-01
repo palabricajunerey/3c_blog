@@ -1,3 +1,11 @@
+<?php 
+
+if(!isset($enabled_page)){
+    header("location: index.php");
+}
+session_start();
+    include 'conn.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
 
-        <!-- <?php 
+         <?php 
         if(isset($index)){
             echo 'Home';
         }elseif(isset($blog)){
@@ -17,7 +25,7 @@
         }else{
             echo 'Login';
         }
-        ?> -->
+        ?> 
     </title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -64,10 +72,14 @@
                         ?>
                     </li>
                     <li class="nav-item">
-                        <a href="login.php" class="nav-link">Login</a>
+                        <?php if(!isset($_SESSION['logged_in'])){ ?>
+                            <a href="login.php" class="nav-link">Login</a>
                     </li>
                     <li class="nav-item">
                         <a href="signup.php" class="nav-link">Signup</a>
+                    <?php    }else{ ?>
+                        <a href="logout.php" class="nav-link">Logout</a>
+                    <?php    }  ?>
                     </li>
                 </ul>
             </div>

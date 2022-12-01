@@ -1,5 +1,7 @@
 <?php 
-
+if(!isset($enabled_page)){
+    header("location: index.php");
+}
 try{
     $host = "localhost";
     $db_name = "3c_blogs";

@@ -1,19 +1,24 @@
 <?php
+$enabled_page = true;
 $blog = true;
 include 'header.php';
-include 'conn.php';
+if(!isset($_SESSION['logged_in'])){
+    header("location: login.php");
+}
 
 //if create post is click
 if (isset($_POST['create_post'])) {
     //store the inputs to variables
+    $u_id = $_SESSION['u_id'];
     $title = $_POST['post_title'];
     $content = $_POST['post_content'];
 
     //query to insert to our database
-    $insert = $conn->prepare("INSERT INTO blogs (blog_title, blog_content) VALUES (?, ?)");
+    $insert = $conn->prepare("INSERT INTO blogs (blog_title, blog_content, user_id) VALUES (?, ?, ?)");
     $insert->execute([
         $title,
-        $content
+        $content,
+        $u_id
     ]);
     $msg = "Post created!";
     // echo '
@@ -121,13 +126,17 @@ if (isset($_GET['delete'])) {
                         <th>#</th>
                         <th>Title</th>
                         <th>Content</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <?php
 
                 $count = 1;
-                $get_data = $conn->query("SELECT * FROM blogs");
+                $u_id = $_SESSION['u_id'];
+                $get_data = $conn->prepare("SELECT * FROM blogs, users WHERE blogs.user_id = ? AND users.user_id = ?");
+                $get_data->execute([$u_id, $u_id]);
                 foreach ($get_data as $data) { ?>
 
                     <tbody>
@@ -135,6 +144,8 @@ if (isset($_GET['delete'])) {
                             <th><?= $count++ ?></th>
                             <td><?php echo $data['blog_title'] ?></td>
                             <td><?php echo $data['blog_content'] ?></td>
+                            <td><?php echo $data['first_name'] ?></td>
+                            <td><?php echo $data['last_name'] ?></td>
                             <td>
                                 <a href="blog.php?update&p_id=<?= $data['blog_id'] ?>" class="text-decoration-none">✏</a> |
                                 <a href="blog.php?delete&p_id=<?= $data['blog_id'] ?>" class="text-decoration-none">❌</a>

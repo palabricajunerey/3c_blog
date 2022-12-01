@@ -1,5 +1,6 @@
 <?php 
 $index = true;
+$enabled_page = true;
 include 'header.php';
 
 ?>
